@@ -1,11 +1,12 @@
 from app.main import bp
+from flask import render_template
 
 import requests
 
 
 @bp.route('/hi')
 def hello_From_controller():
-    return "I am controller"
+    return render_template("index.html")
 
 
 @bp.route('/getData')
