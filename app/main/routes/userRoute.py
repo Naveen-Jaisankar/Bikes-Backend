@@ -4,7 +4,7 @@ from flask import render_template
 import requests
 
 
-@bp.route('/hi')
+@bp.route('/')
 def hello_From_controller():
     return render_template("index.html")
 
