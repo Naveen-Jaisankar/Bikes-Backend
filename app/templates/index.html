@@ -6,6 +6,7 @@
       <title>Dublin Bikes</title>
       <link rel="stylesheet" href="../static/css/styles.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+       <script type="text/javascript" {{ url_for('static', filename='index.js')}}></script>
    </head>
    <body>
       <header>
@@ -19,7 +20,7 @@
             <button id="search-button" aria-label="Search" onclick="search()">
                 <i class="fas fa-search search-icon"></i>
             </button>
-            <input type="text" id="search-input" placeholder="Search Station">
+            <input type="text" id="search-input" placeholder="Search Current Station">
         </div>
 
 
