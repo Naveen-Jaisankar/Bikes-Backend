@@ -91,7 +91,7 @@ function addMarkerWithLabel(position, obj) {
                 <b>Total Bike Stands</b>: ${obj.bike_stands}
             </p>
             <p>
-                <b>Total Available Bike Stands</b>: ${obj.available_bike_stands}
+                <b>Total Available Bike Stands</b> : ${obj.available_bike_stands}
             </p>
             <p>
                <b>Available Bikes</b>: ${obj.available_bikes}
