@@ -102,6 +102,10 @@ main {
     border-right: 1px solid #ccc;
 }
 
+.nav-item:hover{
+    background-color: #99b080;
+}
+
 .nav-item.active {
     background-color: #99b080;
 }

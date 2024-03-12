@@ -1,6 +1,7 @@
 // Initialize and add the map
 var map;
 var stationPositions = [];
+let myLocation = {lat:'', lng:''};
 
 async function initMap() {
   var position;
@@ -38,6 +39,8 @@ async function initMap() {
           title: "Your Location",
           icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // Set custom icon
       });
+      myLocation.lat = position.lat;
+      myLocation.lng = position.lng;
       getStationCoordinates()
     }, function() {
         alert('Error: The Geolocation service failed.');
@@ -147,4 +150,62 @@ function search(){
       });
     }
   });
+}
+
+function searchDestination(){
+    console.log(myLocation);
+    var address = document.getElementById("search-input").value;
+    console.log(address);
+}
+
+async function getRoute(e){
+                    e.preventDefault();
+                    let route = {
+                        source:document.getElementById("source").value,
+                        destination:document.getElementById("destination").value,
+                        day:document.getElementById("day").value,
+                        time:document.getElementById("time").value
+                    }
+                    // let route = new FormData(document.querySelector('form'));
+                    // console.log(route);
+                    await fetch('/getRoute',{
+                        method:'POST',
+                        body: route,
+                        // body: new FormData(document.querySelector('form')),
+                        headers:{
+                            'Content-Type':'application/json'
+                        }
+                    }).then((res)=>{
+                        console.log("Response "+res.json());
+                    }).catch((err)=>{
+                        console.log("Err"+err);
+                    })
+}
+
+function searchRoute(){
+    // method="post" action="/getRoute"
+    var html = `
+<div class="container">
+        <form >
+            <label for="source">Source</label>
+            <input type="text" name="source"  id="source" placeholder="Enter your source here" required><br>
+            <label for="destination">Destination</label>
+            <input type="text"  name="destination" placeholder="Enter your destination here" id="destination" required><br>
+            <label for="day">Day</label>
+            <select id="day" required>
+                <option>Sunday</option>
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+            </select>
+            <label for="time">Time</label>
+            <input type="text" placeholder="hh:mm" id="time" required><br>
+            <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
+        </form>
+</div>
+    `;
+    document.getElementById('showInfo').innerHTML = html;
 }
