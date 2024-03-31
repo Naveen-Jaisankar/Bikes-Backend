@@ -1,8 +1,9 @@
 import os
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
 class Config(object):
-    SECERET_KEY = os.environ.get('SECERET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('mysql://root:root#@localhost/dublin_bikes')
+    DB_USERNAME = 'admin'
+    DB_PASSWORD = 'qwerty1234'
+    DB_NAME = 'dbikes'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@dbikes.c18uciisw27v.eu-west-1.rds.amazonaws.com:3306/' + DB_NAME + ''
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False

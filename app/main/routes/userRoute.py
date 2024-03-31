@@ -2,26 +2,26 @@ from flask_cors import cross_origin
 
 from app.main import bp
 from flask import render_template, request, jsonify
+from app.Model import Station, Availability
 
 import requests
 
-
 @bp.route('/')
 def hello_From_controller():
-    API_KEY = 'a6a27a0d825d27f290184340b4de29ce3080eecb'
-    CONTRACT_NAME = 'dublin'
-    stations = requests.get(
-        f'https://api.jcdecaux.com/vls/v1/stations?contract=' + CONTRACT_NAME + '&apiKey=' + API_KEY).json()
+    stations = Station.query.all()
     return render_template("index.html", stations=stations)
-
-
-@bp.route('/getData')
-def getAPIData():
-    API_KEY = 'a6a27a0d825d27f290184340b4de29ce3080eecb'
-    CONTRACT_NAME = 'dublin'
-    data = requests.get(
-        'https://api.jcdecaux.com/vls/v1/stations?contract=' + CONTRACT_NAME + '&apiKey=' + API_KEY + '')
-    return data.json()
+@bp.route('/get-station-and-availability-data')
+def get_station_and_availability_data():
+    stations = Station.query.all()
+    result = []
+    for station in stations:
+        availability = Availability.query.filter_by(number_id=station.number).order_by(
+            Availability.last_update.desc()).first()
+        if availability:
+            station_data = station.to_dict()
+            station_data.update(availability.to_dict())
+            result.append(station_data)
+    return jsonify(result)
 
 
 @bp.route('/getRoute', methods=['POST'])

@@ -50,21 +50,23 @@ async function initMap() {
   }
 }
 
-function getStationCoordinates(){
 
-  fetch('/getData')
-  .then(response => response.json())
-      .then(stations => {
-        stations.forEach(function(station) {
-            addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
-        });
-        stationPositions = stations;
-        console.log(stationPositions);
-      })
-      .catch(error => {
-          console.error('Error fetching data:', error);
+
+function getStationCoordinates() {
+  // Assume the endpoint /get-station-and-availability-data provides both station and availability data
+  fetch('/get-station-and-availability-data')
+    .then(response => response.json())
+    .then(stations => {
+      stations.forEach(function(station) {
+        addMarkerWithLabel({lat: station.position_lat, lng: station.position_lng}, station);
       });
+      console.log(stations);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
 }
+
 
 function bindInfoWindow(marker, map, infowindow, html) {
     google.maps.event.addListener(marker, 'mouseover', function () {
@@ -209,3 +211,5 @@ function searchRoute(){
     `;
     document.getElementById('showInfo').innerHTML = html;
 }
+
+
