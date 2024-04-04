@@ -18,36 +18,28 @@
          </div>
       </header>
       <main>
-        <div class="search-box">
-            <button id="search-button" aria-label="Search" onclick="searchDestination()">
-                <i class="fas fa-search search-icon"></i>
-            </button>
-            <input type="text" id="search-input" placeholder="Search Current Station">
-        </div>
-
-
-
+      <div class="main-container">
          <div class="weather-container">
             <div class="current-weather">
-                <p>Current weather here.</p>
-            </div>
-            <div class="weather-forecast">
-                <p class="weather-forecast-title">5-Day Forecast</p>
-                <p>Future weather here.</p>
-            </div>
+               <p>Current weather here.</p>
          </div>
-
-    <div class="sidebar">
-        <nav class="nav-bar">
-            <div class="nav-item" id="route" onclick="searchRoute()">Route</div>
-            <div class="nav-item" id="prediction">Prediction</div>
-        </nav>
-        <div id="showInfo"></div>
-    </div>
-
-
-
-         <div id="map"></div>
+         <div class="weather-forecast">
+               <p class="weather-forecast-title">5-Day Forecast</p>
+               <p>Future weather here.</p>
+         </div>
+         </div>
+         <div class="map-container" id="map">
+         </div>
+         <div class="sidebar">
+            <nav class="nav-bar">
+               <div class="nav-item" id="route" onclick="searchRoute()">Route</div>
+               <div class="nav-item" id="prediction">Prediction</div>
+           </nav>
+           <div id="showInfo"></div>
+           <div id="showResult">
+           </div>
+         </div>
+      </div>
       </main>
       <footer>
          <p class="copyright">2024 &copy;Group10</p>
@@ -56,10 +48,3 @@
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhPvITkXewUHkhDGJdDFLW871e1d2EKTw&libraries=places&callback=initMap" defer></script>
    </body>
 </html>
-
-<!--Icon:
-Park: <i class="fa-solid fa-p"></i>
-Bike: <i class="fa-solid fa-bicycle"></i>
-Station: <i class="fa-light fa-location-dot"></i>
-
--->
