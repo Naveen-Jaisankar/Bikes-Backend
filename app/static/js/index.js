@@ -2,7 +2,7 @@
 var map;
 var stationPositions = [];
 let myLocation = {lat:'', lng:''};
-
+let data;
 async function initMap() {
   var position;
   if (navigator.geolocation) {
@@ -58,6 +58,7 @@ function getStationCoordinates(){
   fetch('/getData')
   .then(response => response.json())
       .then(stations => {
+          data = stations;
         stations.forEach(function(station) {
             addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
         });
@@ -76,14 +77,28 @@ function bindInfoWindow(marker, map, infowindow, html) {
     });
 }
 function addMarkerWithLabel(position, obj) {
+    var availability_percentage = parseInt(obj.available_bikes) / (parseInt(obj.available_bikes) + parseInt(obj.available_bike_stands));
+                if (availability_percentage > .7) {
+                    color = "green";
+                } else if (availability_percentage > .3) {
+                    color = "orange";
+                } else {
+                    color = "red";
+                }
+                let url = "http://maps.google.com/mapfiles/ms/icons/";
+                url += color + "-dot.png";
     var infowindow =  new google.maps.InfoWindow({
-	content: '',
-	map: map
-});
+	    content: '',
+	    map: map,
+        title: obj.name
+    });
   const marker = new google.maps.Marker({
     map: map,
     position: position,
-    title: obj.name
+    title: obj.name,
+      icon:{
+        url
+      }
   });
   marker.addListener('mouseover', function() {
     infowindow.open(map, this);
@@ -169,10 +184,17 @@ async function getRoute(e){
                     e.preventDefault();
 
                     const url = new URL('http://127.0.0.1:5000/getRoutee');
+                    let destinationId;
+                    destination=document.getElementById("destination").value;
+                    for(let i of data){
+                        if(i.name.toUpperCase()==destination.toUpperCase()){
+                            destinationId = i.number;
+                        }
+                    }
 
                     const params = {
                         source:document.getElementById("source").value,
-                        destination:document.getElementById("destination").value,
+                        destination:destinationId,
                         day:document.getElementById("day").value,
                         time:document.getElementById("time").value
                     }

@@ -35,7 +35,6 @@ def getAPIData():
 @cross_origin()
 def getRoutee():
     print("I am hit")
-    
     source = request.args.get('source', default='', type=str)
     destination = request.args.get('destination', default='', type=str)
     day = request.args.get('day', default='', type=str)
