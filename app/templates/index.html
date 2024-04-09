@@ -20,13 +20,16 @@
       <main>
       <div class="main-container">
          <div class="weather-container">
-            <div class="current-weather">
-               <p>Current weather here.</p>
-         </div>
-         <div class="weather-forecast">
-               <p class="weather-forecast-title">5-Day Forecast</p>
-               <p>Future weather here.</p>
-         </div>
+            <div id="current-weather">
+                <div class="temp-and-icon">
+                    <img id="weatherIcon" src="" alt="Weather icon">
+                    <p id="temperature"></p>
+                </div>
+                <p id="weatherMain"></p>
+            </div>
+
+            <div id="weather-forecast">
+            </div>
          </div>
          <div class="map-container" id="map">
          </div>

@@ -305,3 +305,66 @@ function searchRoute(){
     `;
     document.getElementById('showInfo').innerHTML = html;
 }
+
+var city_name = 'Dublin';
+var country_code = 'IE';
+var appid = '71287dae2da257653b6b14989d35491f';
+// Show current weather
+document.addEventListener('DOMContentLoaded', function() {
+    var url = `https://api.openweathermap.org/data/2.5/weather?q=${city_name},${country_code}&appid=${appid}`;
+
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Show the current icon
+            var iconUrl = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+            var weatherIcon = document.getElementById('weatherIcon');
+            weatherIcon.src = iconUrl;
+
+            // Show the current temperature
+            var tempCelsius = (data.main.temp - 273.15).toFixed(0);
+            document.getElementById('temperature').textContent = tempCelsius + ' °C';
+
+            // Show the current main weather
+            document.getElementById('weatherMain').textContent = data.weather[0].main;
+        })
+        .catch(error => console.error('Fetching weather data failed', error));
+});
+
+// Show 5-day weather forecast
+document.addEventListener('DOMContentLoaded', function() {
+    var url = `https://api.openweathermap.org/data/2.5/forecast/daily?q=${city_name},${country_code}&cnt=5&appid=${appid}`;
+    var forecastContainer = document.getElementById('weather-forecast');
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            data.list.forEach(function(day) {
+                // Get the date and show it in 'Apr 1' style
+                var date = new Date(day.dt * 1000);
+                var dateString = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+                // Show main, icon and temperature in 5 days
+                var main = day.weather[0].main;
+                var iconCode = day.weather[0].icon;
+                var tempCelsius = (day.temp.day - 273.15).toFixed(0);
+
+                var iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
+
+                var dayForecastDiv = document.createElement('div');
+                dayForecastDiv.className = 'day-forecast';
+                dayForecastDiv.innerHTML = `
+                    <p class="fore-date">${dateString}</p>
+                    <img src="${iconUrl}" alt="Weather icon" class="weather-icon">
+                    <p class="fore-main">${main}</p>
+                    <p class="fore-tmp">${tempCelsius} °C</p>
+                `;
+
+                forecastContainer.appendChild(dayForecastDiv);
+            });
+        })
+        .catch(error => console.error('Fetching weather data failed', error));
+});
+
+
