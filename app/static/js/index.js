@@ -3,8 +3,11 @@ var map;
 var stationPositions = [];
 let myLocation = {lat:'', lng:''};
 let data;
+var directionsService ;
+var directionsDisplay;
 async function initMap() {
   var position;
+  directionsService= new google.maps.DirectionsService();
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
         position = {lat: position.coords.latitude, lng: position.coords.longitude}
@@ -33,6 +36,12 @@ async function initMap() {
               }
         ]
       });
+        directionsDisplay = new google.maps.DirectionsRenderer({
+                draggable: true,
+                map,
+                panel: document.getElementById("overlayContent")
+            });
+            directionsDisplay.setMap(map);
       const marker = new google.maps.Marker({
         map: map,
         position: position,
@@ -180,21 +189,39 @@ function searchDestination(){
     console.log(address);
 }
 
+// function stationToStation() {
+//     var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
+//     var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
+//     calcRoute({
+//         "lat": stations[selectedOptionVal1][0],
+//         "lng": stations[selectedOptionVal1][1]
+//     }, [stations[selectedOptionVal2][0], stations[selectedOptionVal2][1]], "bike");
+//     // $('#overlay').css({'opacity': 100});
+//     return false;
+// }
+
 async function getRoute(e){
                     e.preventDefault();
 
                     const url = new URL('http://127.0.0.1:5000/getRoutee');
                     let destinationId;
+                    var latLngMap = new Map();
                     destination=document.getElementById("destination").value;
+                    source = document.getElementById("source").value;
                     for(let i of data){
                         if(i.name.toUpperCase()==destination.toUpperCase()){
                             destinationId = i.number;
+                            latLngMap.set(destination, i.position);
+                        }
+                        if(i.name.toUpperCase()==source.toUpperCase()){
+                            latLngMap.set(source, i.position);
                         }
                     }
 
                     const params = {
                         source:document.getElementById("source").value,
-                        destination:destinationId,
+                        destination:document.getElementById("destination").value,
+                        id:destinationId,
                         day:document.getElementById("day").value,
                         time:document.getElementById("time").value
                     }
@@ -208,74 +235,155 @@ async function getRoute(e){
                   .then(response => response.json()) // parsing the JSON response
                   .then(
                     data => {
+                        // var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
+                        // var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
+                        var selectedOptionVal1 = document.getElementById("source").value;
+                        var selectedOptionVal2 = document.getElementById("destination").value;
+                        calcRoute(
+                         latLngMap.get(source), latLngMap.get(destination), "bike");
                       // document.getElementById('title').innerHTML = data
-                      console.log(data[0])
-                      var showResult = document.getElementById('showResult');
-                      console.log(showResult);
-                      showResult = '';
-                      console.log(showResult);
-
-                      // Create the card container
-                      const card = document.createElement('div');
-                      card.className = 'card';
-
-                      // Create the card header
-                      const cardHeader = document.createElement('div');
-                      cardHeader.className = 'card-header';
-                      cardHeader.textContent = data[0].name;
-
-                      // Create the card header span
-                      const cardHeaderSpan = document.createElement('span');
-                      cardHeaderSpan.textContent = data[0].address;
-
-                      // Append the card header span to the card header
-                      cardHeader.appendChild(cardHeaderSpan);
-
-                      // Append the card header to the card
-                      card.appendChild(cardHeader);
-
-                      // Create the card content container
-                      const cardContent = document.createElement('div');
-                      cardContent.className = 'card-content';
-
-                      // Create the first content div
-                      const contentDiv1 = document.createElement('div');
-                      const contentP1 = document.createElement('p');
-                      contentP1.textContent = data[0].available_bike_stands;
-                      const contentSpan1 = document.createElement('span');
-                      contentSpan1.textContent = 'Available Stands';
-
-                      // Append p and span to the first content div
-                      contentDiv1.appendChild(contentP1);
-                      contentDiv1.appendChild(contentSpan1);
-
-                      // Append the first content div to the card content
-                      cardContent.appendChild(contentDiv1);
-
-                      // Create the second content div
-                      const contentDiv2 = document.createElement('div');
-                      const contentP2 = document.createElement('p');
-                      contentP2.textContent =data[0].available_bikes;
-                      const contentSpan2 = document.createElement('span');
-                      contentSpan2.textContent = 'Available Bikes';
-
-                      // Append p and span to the second content div
-                      contentDiv2.appendChild(contentP2);
-                      contentDiv2.appendChild(contentSpan2);
-
-                      // Append the second content div to the card content
-                      cardContent.appendChild(contentDiv2);
-
-                      // Append the card content to the card
-                      card.appendChild(cardContent);
-                      
-                      console.log(card);
-                      // Finally, append the card to the body or any other container element
-                      document.getElementById('showResult').appendChild(card);
+                      // console.log(data[0])
+                        console.log(data);
+                      // var showResult = document.getElementById('showResult');
+                      // console.log(showResult);
+                      // showResult = '';
+                      // console.log(showResult);
+                      //
+                      // // Create the card container
+                      // const card = document.createElement('div');
+                      // card.className = 'card';
+                      //
+                      // // Create the card header
+                      // const cardHeader = document.createElement('div');
+                      // cardHeader.className = 'card-header';
+                      // cardHeader.textContent = data[0].name;
+                      //
+                      // // Create the card header span
+                      // const cardHeaderSpan = document.createElement('span');
+                      // cardHeaderSpan.textContent = data[0].address;
+                      //
+                      // // Append the card header span to the card header
+                      // cardHeader.appendChild(cardHeaderSpan);
+                      //
+                      // // Append the card header to the card
+                      // card.appendChild(cardHeader);
+                      //
+                      // // Create the card content container
+                      // const cardContent = document.createElement('div');
+                      // cardContent.className = 'card-content';
+                      //
+                      // // Create the first content div
+                      // const contentDiv1 = document.createElement('div');
+                      // const contentP1 = document.createElement('p');
+                      // contentP1.textContent = data[0].available_bike_stands;
+                      // const contentSpan1 = document.createElement('span');
+                      // contentSpan1.textContent = 'Available Stands';
+                      //
+                      // // Append p and span to the first content div
+                      // contentDiv1.appendChild(contentP1);
+                      // contentDiv1.appendChild(contentSpan1);
+                      //
+                      // // Append the first content div to the card content
+                      // cardContent.appendChild(contentDiv1);
+                      //
+                      // // Create the second content div
+                      // const contentDiv2 = document.createElement('div');
+                      // const contentP2 = document.createElement('p');
+                      // contentP2.textContent =data[0].available_bikes;
+                      // const contentSpan2 = document.createElement('span');
+                      // contentSpan2.textContent = 'Available Bikes';
+                      //
+                      // // Append p and span to the second content div
+                      // contentDiv2.appendChild(contentP2);
+                      // contentDiv2.appendChild(contentSpan2);
+                      //
+                      // // Append the second content div to the card content
+                      // cardContent.appendChild(contentDiv2);
+                      //
+                      // // Append the card content to the card
+                      // card.appendChild(cardContent);
+                      //
+                      // console.log(card);
+                      // // Finally, append the card to the body or any other container element
+                      // document.getElementById('showResult').appendChild(card);
                     }
                     
                     ) // handling the data from the response
                   .catch(error => console.error('Error:', error)); // handling any error
+}
+
+function calcRoute(start, end, type) {
+    start = new google.maps.LatLng(start.lat, start.lng);
+    end = new google.maps.LatLng(end.lat, end.lng);
+    after_directions_latlng = end;
+    if (type == "bike") {
+        travel_mode = google.maps.DirectionsTravelMode.TRANSIT;
+    } else {
+        travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
+    }
+    var request = {
+        origin: start,
+        destination: end,
+        travelMode: travel_mode
+    };
+
+    directionsService.route(request, function (response, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+            directionsDisplay.setMap(map);
+            if ($('#overlay').length) {
+                // pass;
+            } else {
+                $('#card').append("" +
+                    "            <div class='card' id=\"overlay\">\n" + "<button onclick='PrintElem()'>Print Directions</button>" +
+                    "                <span id='close'\n" +
+                    "                      onClick='this.parentNode.parentNode.removeChild(this.parentNode);  return false;'>x</span>\n" +
+                    "                <div id=\"overlayContent\"></div>\n" +
+                    "            </div>\n"
+                );
+                $('#close').on('click', function () {
+                    directionsDisplay.setMap(null);
+                    directionsDisplay.setPanel(null);
+                    map.setZoom(15);
+                    map.setCenter(after_directions_latlng);
+                });
+
+
+                directionsDisplay.setPanel(document.getElementById("overlayContent"));
+
+            }
+
+            // Define route bounds for use in offsetMap function
+            routeBounds = response.routes[0].bounds;
+
+            // Write directions steps
+
+            // Wait for map to be idle before calling offsetMap function
+            google.maps.event.addListener(map, 'idle', function () {
+
+                // Offset map
+                offsetMap();
+            });
+
+            // Listen for directions changes to update bounds and reapply offset
+            google.maps.event.addListener(directionsDisplay, 'directions_changed', function () {
+
+                // Get the updated route directions response
+                var updatedResponse = directionsDisplay.getDirections();
+
+                // Update route bounds
+                routeBounds = updatedResponse.routes[0].bounds;
+                // console.log(routeBounds);
+                // Fit updated bounds
+                map.fitBounds(routeBounds);
+
+                // Write directions steps
+
+                // Offset map
+                offsetMap();
+            });
+        }
+    });
 }
 
 function searchRoute(){
