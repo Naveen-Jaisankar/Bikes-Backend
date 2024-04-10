@@ -7,7 +7,6 @@ let data;
 var directionsService ;
 var directionsDisplay;
 var markersArary = [];
-var findRouteResponse;
 async function initMap() {
   var position;
   directionsService= new google.maps.DirectionsService();
@@ -240,13 +239,11 @@ async function getRoute(e){
                         // var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
                         var selectedOptionVal1 = document.getElementById("source").value;
                         var selectedOptionVal2 = document.getElementById("destination").value;
-                        findRouteResponse = data;
                         calcRoute(
                          latLngMap.get(source), latLngMap.get(destination), "bike");
                       // document.getElementById('title').innerHTML = data
                       // console.log(data[0])
                         console.log(data);
-                        showBikeAvaibilityChart();
                       // var showResult = document.getElementById('showResult');
                       // console.log(showResult);
                       // showResult = '';
@@ -319,7 +316,11 @@ function calcRoute(start, end, type) {
     start = new google.maps.LatLng(start.lat, start.lng);
     end = new google.maps.LatLng(end.lat, end.lng);
     after_directions_latlng = end;
-    travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
+    if (type == "bike") {
+        travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
+    } else {
+        travel_mode = google.maps.DirectionsTravelMode.TRANSIT;
+    }
     var request = {
         origin: start,
         destination: end,
@@ -333,13 +334,23 @@ function calcRoute(start, end, type) {
             if ($('#overlay').length) {
                 // pass;
             } else {
+                $('#card').append("" +
+                    "            <div class='card' id=\"overlay\">\n" + "<button onclick='PrintElem()'>Print Directions</button>" +
+                    "                <span id='close'\n" +
+                    "                      onClick='this.parentNode.parentNode.removeChild(this.parentNode);  return false;'>x</span>\n" +
+                    "                <div id=\"overlayContent\"></div>\n" +
+                    "            </div>\n"
+                );
                 $('#close').on('click', function () {
                     directionsDisplay.setMap(null);
                     directionsDisplay.setPanel(null);
                     map.setZoom(15);
                     map.setCenter(after_directions_latlng);
                 });
+
+
                 directionsDisplay.setPanel(document.getElementById("overlayContent"));
+
             }
 
             // Define route bounds for use in offsetMap function
@@ -375,91 +386,6 @@ function calcRoute(start, end, type) {
     });
 }
 
-function offsetMap() {
-
-    if (routeBounds !== false) {
-
-        // Clear listener defined in directions results
-        google.maps.event.clearListeners(map, 'idle');
-
-        // Top right corner
-        var topRightCorner = new google.maps.LatLng(map.getBounds().getNorthEast().lat(), map.getBounds().getNorthEast().lng());
-
-        // Top right point
-        var topRightPoint = fromLatLngToPoint(topRightCorner).x;
-
-        // Get pixel position of leftmost and rightmost points
-        var leftCoords = routeBounds.getSouthWest();
-        var leftMost = fromLatLngToPoint(leftCoords).x;
-        var rightMost = fromLatLngToPoint(routeBounds.getNorthEast()).x;
-
-        // Calculate left and right offsets
-        var leftOffset = (overlayWidth - leftMost);
-        var rightOffset = ((topRightPoint - rightMargin) - rightMost);
-
-        // Only if left offset is needed
-        if (leftOffset >= 0) {
-
-            if (leftOffset < rightOffset) {
-
-                var mapOffset = Math.round((rightOffset - leftOffset) / 2);
-
-                // Pan the map by the offset calculated on the x axis
-                map.panBy(-mapOffset, 0);
-
-                // Get the new left point after pan
-                var newLeftPoint = fromLatLngToPoint(leftCoords).x;
-
-                if (newLeftPoint <= overlayWidth) {
-
-                    // Leftmost point is still under the overlay
-                    // Offset map again
-                    offsetMap();
-                }
-
-            } else {
-
-                // Cannot offset map at this zoom level otherwise both leftmost and rightmost points will not fit
-                // Zoom out and offset map again
-                map.setZoom(map.getZoom() - 1);
-                offsetMap();
-            }
-        }
-    }
-}
-
-function showBikeAvaibilityChart(){
-
-var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	theme: "light2", // "light1", "light2", "dark1", "dark2"
-	title:{
-		text: "Bike Availability Data"
-	},
-	axisY: {
-		title: "Available Bikes"
-	},
-	data: [{
-		type: "column",
-		showInLegend: true,
-		legendMarkerColor: "grey",
-		legendText: "1:1",
-		dataPoints: [
-			{ y: "last 40 min", label: findRouteResponse.time[0] },
-			{ y: "last 35 min",  label: findRouteResponse.time[1] },
-			{ y: "last 30 min",  label: findRouteResponse.time[2] },
-			{ y: "last 25 min",  label: findRouteResponse.time[3] },
-			{ y: "last 20 min",  label: findRouteResponse.time[4] },
-			{ y: "last 15 min", label: findRouteResponse.time[5] },
-			{ y: "last 10 min",  label: findRouteResponse.time[6] },
-			{ y: "last 05 min",  label: findRouteResponse.time[7] }
-		]
-	}]
-});
-chart.render();
-
-}
-
 function searchRoute(){
     var html = `
 <div class="container">
@@ -469,7 +395,6 @@ function searchRoute(){
             <label for="destination">Destination</label>
             <input type="text"  name="destination" placeholder="Enter your destination here" id="destination" required><br>
             <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
-            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
         </form>
 </div>
     `;
