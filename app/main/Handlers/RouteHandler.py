@@ -6,7 +6,9 @@ import requests
 import time
 import datetime
 from pathlib import Path
+from sqlalchemy import create_engine
 import warnings
+from sqlalchemy import text
 warnings.filterwarnings('ignore')
 
 import xgboost
@@ -168,3 +170,16 @@ class RouteHandler:
         res={}
         res['availableStations']=json.dumps(str(list(model.predict([df.iloc[-1]]))[0]))
         return res
+
+    def sql_query(self, query):
+        DB_USERNAME = 'admin'
+        DB_PASSWORD = 'qwerty1234'
+        DB_NAME = 'dbikes'
+        CONNECTION_STRING = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@dbikes.c18uciisw27v.eu-west-1.rds.amazonaws.com:3306/' + DB_NAME + ''
+        engine = create_engine(CONNECTION_STRING, echo=True)
+        connection = engine.connect()
+        rows = connection.execute(text(query))
+        connection.close()
+        engine.dispose()
+        # return json.dumps([dict(row._mapping) for row in rows])
+        return rows
