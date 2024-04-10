@@ -1,10 +1,12 @@
 // Initialize and add the map
 var map;
 var stationPositions = [];
+var stationData;
 let myLocation = {lat:'', lng:''};
 let data;
 var directionsService ;
 var directionsDisplay;
+var markersArary = [];
 async function initMap() {
   var position;
   directionsService= new google.maps.DirectionsService();
@@ -67,6 +69,7 @@ function getStationCoordinates(){
   fetch('/getData')
   .then(response => response.json())
       .then(stations => {
+        stationData = stations;
           data = stations;
         stations.forEach(function(station) {
             addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
@@ -96,8 +99,18 @@ function addMarkerWithLabel(position, obj) {
                 }
                 let url = "http://maps.google.com/mapfiles/ms/icons/";
                 url += color + "-dot.png";
+
+                let contentString = `
+                <div>
+                    <p><b>Name</b>: ${obj.name}</p>
+                    <p><b>Total Bike Stands</b>: ${obj.bike_stands}</p>
+                    <p><b>Total Available Bike Stands</b>: ${obj.available_bike_stands}</p>
+                    <p><b>Available Bikes</b>: ${obj.available_bikes}</p>
+                </div>
+            `;            
+
     var infowindow =  new google.maps.InfoWindow({
-	    content: '',
+	    content: contentString,
 	    map: map,
         title: obj.name
     });
@@ -109,25 +122,9 @@ function addMarkerWithLabel(position, obj) {
         url
       }
   });
+  markersArary.push(marker);
   marker.addListener('mouseover', function() {
     infowindow.open(map, this);
-    // infowindow.setContent(obj.name);
-      bindInfoWindow(marker, map, infowindow, `
-        <div>
-            <p>
-                <b>Name</b>: ${obj.name}
-            </p>
-            <p>
-                <b>Total Bike Stands</b>: ${obj.bike_stands}
-            </p>
-            <p>
-                <b>Total Available Bike Stands</b> : ${obj.available_bike_stands}
-            </p>
-            <p>
-               <b>Available Bikes</b>: ${obj.available_bikes}
-            </p>
-        </div>
-      `);
 });
 
 // assuming you also want to hide the infowindow when user mouses-out
@@ -135,6 +132,9 @@ marker.addListener('mouseout', function() {
     infowindow.close();
 });
 }
+
+
+
 
 function search(){
   var geocoder = new google.maps.Geocoder();
@@ -222,12 +222,12 @@ async function getRoute(e){
                         source:document.getElementById("source").value,
                         destination:document.getElementById("destination").value,
                         id:destinationId,
-                        day:document.getElementById("day").value,
-                        time:document.getElementById("time").value
+                        // day:document.getElementById("day").value,
+                        // time:document.getElementById("time").value
                     }
                     // let route = new FormData(document.querySelector('form'));
                     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-                    console.log(route);
+                    // console.log(route);
 
                     fetch(url, {
                       method: 'GET', // GET request
@@ -317,9 +317,9 @@ function calcRoute(start, end, type) {
     end = new google.maps.LatLng(end.lat, end.lng);
     after_directions_latlng = end;
     if (type == "bike") {
-        travel_mode = google.maps.DirectionsTravelMode.TRANSIT;
-    } else {
         travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
+    } else {
+        travel_mode = google.maps.DirectionsTravelMode.TRANSIT;
     }
     var request = {
         origin: start,
@@ -387,7 +387,6 @@ function calcRoute(start, end, type) {
 }
 
 function searchRoute(){
-    // method="post" action="/getRoute"
     var html = `
 <div class="container">
         <form >
@@ -395,18 +394,6 @@ function searchRoute(){
             <input type="text" name="source"  id="source" placeholder="Enter your sources here" required><br>
             <label for="destination">Destination</label>
             <input type="text"  name="destination" placeholder="Enter your destination here" id="destination" required><br>
-            <label for="day">Day</label>
-            <select id="day" required>
-                <option>Sunday</option>
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thursday</option>
-                <option>Friday</option>
-                <option>Saturday</option>
-            </select>
-            <label for="time">Time</label>
-            <input type="text" placeholder="hh:mm" id="time" required><br>
             <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
         </form>
 </div>
@@ -476,3 +463,109 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+function initAutocomplete() {
+    // Create the autocomplete object, restricting the search predictions to
+    // geographical location types.
+    const autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById('locationSearch'),
+        { types: ['geocode'] }
+    );
+    autocomplete.bindTo('bounds', map);
+
+
+    // Avoid paying for data that you don't need by restricting the set of
+    // place fields that are returned to just the address components.
+    autocomplete.setFields(['address_component','geometry']);
+
+    // Set up a listener to do something when a user selects a location from the
+    // suggestions. For example, you can retrieve the user's selected address
+    // components here if needed.
+    autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        console.log(place)
+        if (!place.geometry) {
+            stationData.forEach(function(station) {
+                addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
+            });
+            return;
+        }
+        console.log(place);
+        // Now that we have a place, let's find the nearest stations
+        const userLocation = place.geometry.location;
+        const nearestStations = findNearestStations(userLocation);
+
+        clearMarkers();
+
+        nearestStations.forEach(function(station) {
+            addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
+        });
+
+        adjustCameraToMarkers()
+        
+        // Implement what you want to do with the selected place info here.
+        // For instance, you can extract the address components.
+    });
+}
+
+// const locationSearchInput = document.getElementById('locationSearch');
+//     locationSearchInput.addEventListener('input', function() {
+//         if (!this.value) {
+//             // Input field has been cleared
+//             stationData.forEach(function(station) {
+//                 addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
+//             });
+//         }
+//     });
+
+function clearMarkers() {
+    for (let i = 0; i < markersArary.length; i++) {
+        markersArary[i].setMap(null);
+    }
+    markersArary = []; // Clear the array
+}
+
+function adjustCameraToMarkers() {
+    if (markersArary.length === 0) return; // Check if there are markers
+
+    const bounds = new google.maps.LatLngBounds();
+    markersArary.forEach(marker => {
+        bounds.extend(marker.getPosition());
+    });
+    // Smoothly pan the map
+    const center = bounds.getCenter();
+
+    // Smoothly pan to the center of the bounds
+    map.panTo(center);
+
+    // // Optionally, set a timeout to adjust zoom after panning. This isn't smooth but prevents zooming before panning.
+    // setTimeout(() => {
+    //     map.fitBounds(bounds, {padding: 10}); // Adjust the map view
+    // }, 3000); // Adjust the timeout as needed
+}
+
+function findNearestStations(userLocation) {
+    const radius = 1000; // 5 km in meters
+    const nearestStations = stationData.filter(station => {
+        const stationLocation = new google.maps.LatLng(station.position.lat, station.position.lng);
+        const distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, stationLocation);
+        return distance <= radius;
+    })
+    .sort((a, b) => {
+        const locationA = new google.maps.LatLng(a.latitude, a.longitude);
+        const locationB = new google.maps.LatLng(b.latitude, b.longitude);
+        const distanceA = google.maps.geometry.spherical.computeDistanceBetween(userLocation, locationA);
+        const distanceB = google.maps.geometry.spherical.computeDistanceBetween(userLocation, locationB);
+        return distanceA - distanceB;
+    })
+    .slice(0, 5);
+
+
+
+    // Here you can do something with the nearest stations, like displaying them on the map
+    console.log(nearestStations);
+
+    return nearestStations;
+}
+
+// When the window has finished loading, initialize the autocomplete function.
+window.addEventListener('load', initAutocomplete);
