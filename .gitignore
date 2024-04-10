@@ -1,3 +1,6 @@
 app/__pycache__/__init__.cpython-311.pyc
 app/main/__pycache__/__init__.cpython-311.pyc
 app/main/routes/__pycache__/userRoute.cpython-311.pyc
+app/main/Handlers/__pycache__/RouteHandler.cpython-311.pyc
+__pycache__/config.cpython-311.pyc
+app/main/Handlers/__pycache__/RouteHandler.cpython-311.pyc
