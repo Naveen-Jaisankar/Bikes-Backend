@@ -1,10 +1,15 @@
+import datetime
+import json
+
 from flask_cors import cross_origin
 
 from app.main import bp
 from flask import render_template, request, jsonify, url_for
+from sqlalchemy import select
 
 import requests
-import sys,os
+import pymysql
+import pandas as pd
 
 # script_dir = os.path.dirname( __file__ )
 # mymodule_dir = os.path.join( script_dir, '..', 'Handlers' )
@@ -43,6 +48,15 @@ def getRoutee():
     time = request.args.get('time', default='', type=str)
     routeHandler = RouteHandler()
     response = routeHandler.predictStation(destinationid)
+    statement = """SELECT * FROM dbikes.availability where number_id="""+str(destinationid)+""" order by last_update desc limit 10;"""
+    # statement = """"SELECT * FROM dbikes.availability where number_id="""+destinationid+"""
+    #     and timestampdiff(MINUTE,availability.last_update, availability.last_update) < 5 && timestampdiff(MINUTE,availability.time_queried, weather_current.time_queried) > 0"""""
+    df = routeHandler.sql_query(statement)
+    # print(list(df))
+    temp = []
+    for i in list(df):
+        temp.append(i.index(3))
+    response['time'] = json.dumps(str((temp)))
     # response =  routeHandler.getRoute(source,destination,day,time)
     return jsonify(response)
 
