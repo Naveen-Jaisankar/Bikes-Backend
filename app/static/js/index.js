@@ -249,8 +249,7 @@ async function getRoute(e){
                         showBikeAvaibilityChart();
                         var html = `
                             <div class="card">
-                                <span>Avaibility Data for Destination Station ${destination} : ${parseFloat(findRouteResponse.availableStations)}</span>
-                            
+                                <span>Predicted Number of Avaibility Bikes for Destination Station ${destination} : <b>${parseFloat(findRouteResponse.availableStations)}</b></span>
                             </div>
                         `;
                       document.getElementById('showResult').innerHTML = html;

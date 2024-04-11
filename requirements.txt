@@ -5,3 +5,4 @@ sqlalchemy
 xgboost
 pickle
 pymysql
+scikit-learn
