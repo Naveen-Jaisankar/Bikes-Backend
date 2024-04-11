@@ -7,6 +7,7 @@ let data;
 var directionsService ;
 var directionsDisplay;
 var markersArary = [];
+var findRouteResponse;
 async function initMap() {
   var position;
   directionsService= new google.maps.DirectionsService();
@@ -239,88 +240,57 @@ async function getRoute(e){
                         // var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
                         var selectedOptionVal1 = document.getElementById("source").value;
                         var selectedOptionVal2 = document.getElementById("destination").value;
+                        findRouteResponse = data;
                         calcRoute(
                          latLngMap.get(source), latLngMap.get(destination), "bike");
                       // document.getElementById('title').innerHTML = data
                       // console.log(data[0])
-                        console.log(data);
-                      // var showResult = document.getElementById('showResult');
-                      // console.log(showResult);
-                      // showResult = '';
-                      // console.log(showResult);
-                      //
-                      // // Create the card container
-                      // const card = document.createElement('div');
-                      // card.className = 'card';
-                      //
-                      // // Create the card header
-                      // const cardHeader = document.createElement('div');
-                      // cardHeader.className = 'card-header';
-                      // cardHeader.textContent = data[0].name;
-                      //
-                      // // Create the card header span
-                      // const cardHeaderSpan = document.createElement('span');
-                      // cardHeaderSpan.textContent = data[0].address;
-                      //
-                      // // Append the card header span to the card header
-                      // cardHeader.appendChild(cardHeaderSpan);
-                      //
-                      // // Append the card header to the card
-                      // card.appendChild(cardHeader);
-                      //
-                      // // Create the card content container
-                      // const cardContent = document.createElement('div');
-                      // cardContent.className = 'card-content';
-                      //
-                      // // Create the first content div
-                      // const contentDiv1 = document.createElement('div');
-                      // const contentP1 = document.createElement('p');
-                      // contentP1.textContent = data[0].available_bike_stands;
-                      // const contentSpan1 = document.createElement('span');
-                      // contentSpan1.textContent = 'Available Stands';
-                      //
-                      // // Append p and span to the first content div
-                      // contentDiv1.appendChild(contentP1);
-                      // contentDiv1.appendChild(contentSpan1);
-                      //
-                      // // Append the first content div to the card content
-                      // cardContent.appendChild(contentDiv1);
-                      //
-                      // // Create the second content div
-                      // const contentDiv2 = document.createElement('div');
-                      // const contentP2 = document.createElement('p');
-                      // contentP2.textContent =data[0].available_bikes;
-                      // const contentSpan2 = document.createElement('span');
-                      // contentSpan2.textContent = 'Available Bikes';
-                      //
-                      // // Append p and span to the second content div
-                      // contentDiv2.appendChild(contentP2);
-                      // contentDiv2.appendChild(contentSpan2);
-                      //
-                      // // Append the second content div to the card content
-                      // cardContent.appendChild(contentDiv2);
-                      //
-                      // // Append the card content to the card
-                      // card.appendChild(cardContent);
-                      //
-                      // console.log(card);
-                      // // Finally, append the card to the body or any other container element
-                      // document.getElementById('showResult').appendChild(card);
+                        console.log(findRouteResponse.availableStations);
+                        showBikeAvaibilityChart();
+                        var html = `
+                            <div class="card">
+                                <span>Avaibility Data for Destination Station ${destination} : ${parseFloat(findRouteResponse.availableStations)}</span>
+                            
+                            </div>
+                        `;
+                      document.getElementById('showResult').innerHTML = html;
                     }
                     
                     ) // handling the data from the response
                   .catch(error => console.error('Error:', error)); // handling any error
 }
 
+function showBikeAvaibilityChart(){
+temp = findRouteResponse.time;
+console.log(temp);
+var xValues = ["last 40 min", "last 35 min", "last 30 min", "last 25 min", "last 20 min", "last 15 min", "last 10 min", "last 05 min"];
+var yValues = temp;
+var barColors = [];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Bike Avaibility Data"
+    }
+  }
+});
+}
+
 function calcRoute(start, end, type) {
     start = new google.maps.LatLng(start.lat, start.lng);
     end = new google.maps.LatLng(end.lat, end.lng);
     after_directions_latlng = end;
-    if (type == "bike") {
-        travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
-    } else {
-        travel_mode = google.maps.DirectionsTravelMode.TRANSIT;
-    }
+    travel_mode = google.maps.DirectionsTravelMode.BICYCLING;
     var request = {
         origin: start,
         destination: end,
@@ -395,6 +365,7 @@ function searchRoute(){
             <label for="destination">Destination</label>
             <input type="text"  name="destination" placeholder="Enter your destination here" id="destination" required><br>
             <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
         </form>
 </div>
     `;

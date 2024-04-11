@@ -168,7 +168,8 @@ class RouteHandler:
         model = pickle.load(open(filename, 'rb'))
         # !{sys.executable} - m pip install xgboost
         res={}
-        res['availableStations']=json.dumps(str(list(model.predict([df.iloc[-1]]))[0]))
+        # res['availableStations']=json.dumps(str(list(model.predict([df.iloc[-1]]))[0]))
+        res['availableStations']=round(list(model.predict([df.iloc[-1]]))[0])
         return res
 
     def sql_query(self, query):

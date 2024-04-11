@@ -10,6 +10,7 @@ from sqlalchemy import select
 import requests
 import pymysql
 import pandas as pd
+import random
 
 # script_dir = os.path.dirname( __file__ )
 # mymodule_dir = os.path.join( script_dir, '..', 'Handlers' )
@@ -51,12 +52,15 @@ def getRoutee():
     statement = """SELECT * FROM dbikes.availability where number_id="""+str(destinationid)+""" order by last_update desc limit 10;"""
     # statement = """"SELECT * FROM dbikes.availability where number_id="""+destinationid+"""
     #     and timestampdiff(MINUTE,availability.last_update, availability.last_update) < 5 && timestampdiff(MINUTE,availability.time_queried, weather_current.time_queried) > 0"""""
-    df = routeHandler.sql_query(statement)
-    # print(list(df))
+    # df = routeHandler.sql_query(statement)
+    # # print(list(df))
     temp = []
-    for i in list(df):
-        temp.append(i.index(3))
-    response['time'] = json.dumps(str((temp)))
+    # for i in list(df):
+    #     temp.append(i.index(3))
+    for i in range(10):
+        temp.append(random.randint(0, 10))
+    response['time'] = temp
+    # json.dumps(temp)
     # response =  routeHandler.getRoute(source,destination,day,time)
     return jsonify(response)
 
