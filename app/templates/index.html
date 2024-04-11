@@ -37,21 +37,24 @@
          </div>
          <div class="sidebar">
             <div class="container">
-               <div>
+               <div id="route-container">
                   <div class="heading">Get Route</div>
                   <form >
                      <label for="source">Source</label>
-                     <input type="text" name="source"  id="source" placeholder="Enter your sources here" required><br>
+                      <br>
+                     <input type="text" name="source" class="input" id="source" placeholder="Enter your sources here" required><br>
                      <label for="destination">Destination</label>
-                     <input type="text"  name="destination" placeholder="Enter your destination here" id="destination" required><br>
+                      <br>
+                     <input type="text"  name="destination" class="input" placeholder="Enter your destination here" id="destination" required><br>
                      <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
                   </form>
                </div>
-               <div>
+
+               <div id="availability-container">
                   <div class="heading">Check Availability</div>
                   <form>
                      <label for="locationSearch">Enter Location</label>
-                     <input type="text" name="locationSearch"  id="locationSearch" placeholder="Enter your Location"><br>
+                     <input type="text" name="locationSearch" class="input" id="locationSearch" placeholder="Enter your location here"><br>
                      <button type="submit" onClick="checkAvailabilty(event);">Check Availability</button>
                   </form>
                   <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
@@ -62,6 +65,12 @@
            <div id="showResult">
            </div>
          </div>
+          <!-- Loading prompt -->
+        <div id="loadingMessage">
+            <p id="prompt-text">Loading, please wait a moment...</p>
+            <button id="prompt" onclick="closeLoadingMessage()">X</button>
+        </div>
+
       </div>
       </main>
       <footer>
@@ -70,4 +79,6 @@
       <script src="../static/js/index.js" defer></script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhPvITkXewUHkhDGJdDFLW871e1d2EKTw&libraries=places&callback=initMap" defer></script>
    </body>
+
+
 </html>

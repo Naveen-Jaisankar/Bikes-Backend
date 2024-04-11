@@ -203,6 +203,8 @@ function searchDestination(){
 
 async function getRoute(e){
                     e.preventDefault();
+                    // prompt box
+                    document.getElementById('loadingMessage').style.display = 'block';
 
                     const url = new URL('http://127.0.0.1:5000/getRoutee');
                     let destinationId;
@@ -539,3 +541,8 @@ function findNearestStations(userLocation) {
 
 // When the window has finished loading, initialize the autocomplete function.
 window.addEventListener('load', initAutocomplete);
+
+// Allow the user to close the prompt box
+function closeLoadingMessage() {
+    document.getElementById('loadingMessage').style.display = 'none';
+}
