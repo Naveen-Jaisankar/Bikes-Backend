@@ -1,11 +1,11 @@
-from app import app as application
+from flask import render_template
+
+from app import app
 from config import Config
 # app = create_app(Config)
 
-app=application
+def main():
+    return render_template("index.html")
 
-# def main():
-#     app
-#
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    app.run(debug=True)
