@@ -108,7 +108,16 @@ function addMarkerWithLabel(position, obj) {
                     <p><b>Total Available Bike Stands</b>: ${obj.available_bike_stands}</p>
                     <p><b>Available Bikes</b>: ${obj.available_bikes}</p>
                 </div>
-            `;            
+            `;
+    // var url = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld='+obj.available_bikes+'|FF776B|000000';
+    // let contentString = `
+    //             <div>
+    //                 <p><b>Name</b>: ${obj.name}</p>
+    //                 <p><b>Total Bike Stands</b>: ${obj.bike_stands}</p>
+    //                 <p><b>Total Available Bike Stands</b>: ${obj.available_bike_stands}</p>
+    //                 <p><b>Available Bikes</b>: ${obj.available_bikes}</p>
+    //             </div>
+    // `;
 
     var infowindow =  new google.maps.InfoWindow({
 	    content: contentString,
@@ -118,20 +127,20 @@ function addMarkerWithLabel(position, obj) {
   const marker = new google.maps.Marker({
     map: map,
     position: position,
-    title: obj.name,
+    title: obj.available_bikes,
       icon:{
         url
-      }
+      },
+      shadow:'https://chart.googleapis.com/chart?chst=d_map_pin_shadow'
   });
   markersArary.push(marker);
   marker.addListener('mouseover', function() {
-    infowindow.open(map, this);
-});
-
+        infowindow.open(map, this);
+    });
 // assuming you also want to hide the infowindow when user mouses-out
-marker.addListener('mouseout', function() {
-    infowindow.close();
-});
+    marker.addListener('mouseout', function() {
+        infowindow.close();
+    });
 }
 
 
@@ -249,11 +258,18 @@ async function getRoute(e){
                       // console.log(data[0])
                         console.log(findRouteResponse.availableStations);
                         showBikeAvaibilityChart();
-                        var html = `
+                        availableStation = 0;
+                        if(parseFloat(findRouteResponse.availableStations)<1){
+                            availableStation = -1*parseFloat(findRouteResponse.availableStations);
+                        }
+                        else{
+                            availableStation = parseFloat(findRouteResponse.availableStations);
+                        }
+                        let html = `
                             <div class="card">
-                                <span>Predicted Number of Avaibility Bikes for Destination Station ${destination} : <b>${parseFloat(findRouteResponse.availableStations)}</b></span>
+                                <span>Predicted Number of Avaibility Bikes for Destination Station ${destination} : <b>${availableStation}</b></span>
                             </div>
-                        `;
+            `;
                       document.getElementById('showResult').innerHTML = html;
                     }
                     
@@ -358,7 +374,7 @@ function calcRoute(start, end, type) {
 }
 
 function searchRoute(){
-    var html = `
+    let html = `
 <div class="container">
         <form >
             <label for="source">Source</label>
@@ -488,7 +504,6 @@ function initAutocomplete() {
 //             });
 //         }
 //     });
-
 function clearMarkers() {
     for (let i = 0; i < markersArary.length; i++) {
         markersArary[i].setMap(null);

@@ -165,7 +165,11 @@ class RouteHandler:
         root_dir = Path(__file__).resolve().parent.parent.parent.parent
         model_name = "Station"+stationId+".pkl"
         filename = root_dir / "models" / model_name
-        model = pickle.load(open(filename, 'rb'))
+        try:
+            model = pickle.load(open(filename, 'rb'))
+        except:
+            filename = root_dir / "models" / "Station1.pkl"
+            model = pickle.load(open(filename, 'rb'))
         # !{sys.executable} - m pip install xgboost
         res={}
         # res['availableStations']=json.dumps(str(list(model.predict([df.iloc[-1]]))[0]))
