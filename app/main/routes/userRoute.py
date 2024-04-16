@@ -30,11 +30,14 @@ def hello_From_controller():
 
 @bp.route('/getData')
 def getAPIData():
-    API_KEY = 'a6a27a0d825d27f290184340b4de29ce3080eecb'
-    CONTRACT_NAME = 'dublin'
-    data = requests.get(
-        'https://api.jcdecaux.com/vls/v1/stations?contract=' + CONTRACT_NAME + '&apiKey=' + API_KEY + '')
-    return data.json()
+    try:
+        API_KEY = 'a6a27a0d825d27f290184340b4de29ce3080eecb'
+        CONTRACT_NAME = 'dublin'
+        data = requests.get(
+            'https://api.jcdecaux.com/vls/v1/stations?contract=' + CONTRACT_NAME + '&apiKey=' + API_KEY + '')
+        return jsonify(data.json())
+    except:
+        return None
 
 
 @bp.route('/getRoutee', methods=['GET'])
