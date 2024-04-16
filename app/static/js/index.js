@@ -13,7 +13,8 @@ async function initMap() {
   directionsService= new google.maps.DirectionsService();
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-        position = {lat: position.coords.latitude, lng: position.coords.longitude}
+        // position = {lat: position.coords.latitude, lng: position.coords.longitude};
+        position = {lat:53.3498, lng:-6.2603};
         map = new google.maps.Map(document.getElementById("map"), {
           zoom: 15,
           center: position,
