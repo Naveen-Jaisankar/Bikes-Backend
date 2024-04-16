@@ -11,10 +11,60 @@ var findRouteResponse;
 async function initMap() {
   var position;
   directionsService= new google.maps.DirectionsService();
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-        // position = {lat: position.coords.latitude, lng: position.coords.longitude};
-        position = {lat:53.3498, lng:-6.2603};
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition(function(position) {
+  //       // position = {lat: position.coords.latitude, lng: position.coords.longitude};
+  //       position = {lat:53.3498, lng:-6.2603};
+  //       map = new google.maps.Map(document.getElementById("map"), {
+  //         zoom: 15,
+  //         center: position,
+  //         mapTypeControl: false,
+  //         fullscreenControl:false,
+  //         streetViewControl: false,
+  //         zoomControl:false,
+  //         keyboardShortcuts:false,
+  //         styles: [
+  //             { elementType: 'geometry', stylers: [{color: '#f5f5f5'}] },
+  //             { elementType: 'labels.icon', stylers: [{visibility: 'off'}] },
+  //             { elementType: 'labels.text.fill', stylers: [{color: '#1b1b1b'}] },
+  //             { elementType: 'labels.text.stroke', stylers: [{color: '#f5f5f5'}] },
+  //             {
+  //                 featureType: 'water',
+  //                 elementType: 'geometry',
+  //                 stylers: [{color: '#c9c9c9'}]
+  //             },
+  //             {
+  //                 featureType: 'landscape',
+  //                 elementType: 'geometry',
+  //                 stylers: [{color: '#e3e3e3'}]
+  //             }
+  //       ]
+  //     });
+  //       directionsDisplay = new google.maps.DirectionsRenderer({
+  //               draggable: true,
+  //               map,
+  //               panel: document.getElementById("overlayContent")
+  //           });
+  //           directionsDisplay.setMap(map);
+  //     const marker = new google.maps.Marker({
+  //       map: map,
+  //       position: position,
+  //       title: "Your Location",
+  //       icon: {
+  //           url: 'https://www.pngall.com/wp-content/uploads/2017/05/Map-Marker-PNG-Clipart.png', // URL to the custom icon
+  //           scaledSize: new google.maps.Size(25, 25), // Sets the icon size
+  //       }
+  //     });
+  //     myLocation.lat = position.lat;
+  //     myLocation.lng = position.lng;
+  //     getStationCoordinates()
+  //   }, function() {
+  //       alert('Error: The Geolocation service failed.');
+  //   });
+  // } else {
+  //     alert('Error: Your browser doesn\'t support geolocation.');
+  // }
+    position = {lat:53.3498, lng:-6.2603};
         map = new google.maps.Map(document.getElementById("map"), {
           zoom: 15,
           center: position,
@@ -58,12 +108,6 @@ async function initMap() {
       myLocation.lat = position.lat;
       myLocation.lng = position.lng;
       getStationCoordinates()
-    }, function() {
-        alert('Error: The Geolocation service failed.');
-    });
-  } else {
-      alert('Error: Your browser doesn\'t support geolocation.');
-  }
 }
 
 function getStationCoordinates(){
