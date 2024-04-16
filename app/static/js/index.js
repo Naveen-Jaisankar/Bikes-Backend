@@ -126,6 +126,7 @@ function getStationCoordinates(){
       .catch(error => {
           console.error('Error fetching data:', error);
       });
+    
 }
 
 function bindInfoWindow(marker, map, infowindow, html) {
@@ -311,6 +312,7 @@ async function getRoute(e){
                         else{
                             availableStation = parseFloat(findRouteResponse.availableStations);
                         }
+                        console.log(availableStation)
                         let html = `
                             <div class="card">
                                 <span>Predicted Number of Avaibility Bikes for Destination Station ${destination} : <b>${availableStation}</b></span>
@@ -607,3 +609,36 @@ window.addEventListener('load', initAutocomplete);
 function closeLoadingMessage() {
     document.getElementById('loadingMessage').style.display = 'none';
 }
+
+$(document).ready(function() {
+    var $select = $('.select2').select2({
+        placeholder: "Select a station",
+        allowClear: true
+    });
+    console.log('unde')
+    // Populate the select element with options from stationData
+    if (typeof stationData === 'undefined') {
+        fetch('/getData')
+  .then(response => response.json())
+      .then(stations => {
+        stationData = stations;
+        stationData.forEach(function(station) {
+            var option = new Option(station.address, station.number, false, false);
+            $select.append(option).trigger('change');
+        });
+      })
+      .catch(error => {
+          console.error('Error fetching data:', error);
+      });
+    }else{
+        console.log('unde')
+        stationData.forEach(function(station) {
+            var option = new Option(station.address, station.number, false, false);
+            $select.append(option).trigger('change');
+        });
+    }
+    
+
+    // Update Select2
+    $select.trigger('change');
+});

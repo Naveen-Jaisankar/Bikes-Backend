@@ -11,6 +11,9 @@
        <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
        <script type="text/javascript" {{ url_for('static', filename='index.js')}}></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+       <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
    </head>
    <body>
       <header>
@@ -42,10 +45,11 @@
                   <form >
                      <label for="source">Source</label>
                       <br>
-                     <input type="text" name="source" class="input" id="source" placeholder="Enter your sources here" required><br>
+                     <select name="source" class="input select2" id="source" required style="width: 100%;"></select><br>
                      <label for="destination">Destination</label>
                       <br>
-                     <input type="text"  name="destination" class="input" placeholder="Enter your destination here" id="destination" required><br>
+                      <select name="destination" class="input select2" id="destination" required style="width: 100%;">
+                    </select><br><br>
                      <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
                   </form>
                </div>
