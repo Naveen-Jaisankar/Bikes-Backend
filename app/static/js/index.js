@@ -121,7 +121,6 @@ function getStationCoordinates(){
             addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
         });
         stationPositions = stations;
-        console.log(stationPositions);
       })
       .catch(error => {
           console.error('Error fetching data:', error);
@@ -155,15 +154,6 @@ function addMarkerWithLabel(position, obj) {
                     <p><b>Available Bikes</b>: ${obj.available_bikes}</p>
                 </div>
             `;
-    // var url = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld='+obj.available_bikes+'|FF776B|000000';
-    // let contentString = `
-    //             <div>
-    //                 <p><b>Name</b>: ${obj.name}</p>
-    //                 <p><b>Total Bike Stands</b>: ${obj.bike_stands}</p>
-    //                 <p><b>Total Available Bike Stands</b>: ${obj.available_bike_stands}</p>
-    //                 <p><b>Available Bikes</b>: ${obj.available_bikes}</p>
-    //             </div>
-    // `;
 
     var infowindow =  new google.maps.InfoWindow({
 	    content: contentString,
@@ -240,42 +230,20 @@ function search(){
 }
 
 function searchDestination(){
-    console.log(myLocation);
     var address = document.getElementById("search-input").value;
-    console.log(address);
 }
-
-// function stationToStation() {
-//     var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
-//     var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
-//     calcRoute({
-//         "lat": stations[selectedOptionVal1][0],
-//         "lng": stations[selectedOptionVal1][1]
-//     }, [stations[selectedOptionVal2][0], stations[selectedOptionVal2][1]], "bike");
-//     // $('#overlay').css({'opacity': 100});
-//     return false;
-// }
 
 async function getRoute(e){
                     e.preventDefault();
                     // prompt box
                     document.getElementById('loadingMessage').style.display = 'block';
 
-                    const url = new URL('http://127.0.0.1:5000/getRoutee');
-                    // const url = new URL('http://3.249.156.68/getRoutee');
+                    // const url = new URL('http://127.0.0.1:5000/getRoutee');
+                    const url = new URL('http://34.254.204.252/getRoutee');
                     let destinationId;
                     var latLngMap = new Map();
                     destination=document.getElementById("destination").value;
                     source = document.getElementById("source").value;
-                    // for(let i of data){
-                    //     if(i.name.toUpperCase()==destination.toUpperCase()){
-                    //         destinationId = i.number;
-                    //         latLngMap.set(destination, i.position);
-                    //     }
-                    //     if(i.name.toUpperCase()==source.toUpperCase()){
-                    //         latLngMap.set(source, i.position);
-                    //     }
-                    // }
                     for(let i of data){
                         if(i.number==destination){
                             destinationId = i.number;
@@ -290,12 +258,9 @@ async function getRoute(e){
                         source:document.getElementById("source").value,
                         destination:document.getElementById("destination").value,
                         id:destinationId,
-                        // day:document.getElementById("day").value,
-                        // time:document.getElementById("time").value
                     }
                     // let route = new FormData(document.querySelector('form'));
                     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-                    // console.log(route);
 
                     fetch(url, {
                       method: 'GET', // GET request
@@ -311,8 +276,6 @@ async function getRoute(e){
                         calcRoute(
                          latLngMap.get(source), latLngMap.get(destination), "bike");
                       // document.getElementById('title').innerHTML = data
-                      // console.log(data[0])
-                        console.log(findRouteResponse.availableStations);
                         showBikeAvaibilityChart();
                         availableStation = 0;
                         if(parseFloat(findRouteResponse.availableStations)<1){
@@ -321,7 +284,6 @@ async function getRoute(e){
                         else{
                             availableStation = parseFloat(findRouteResponse.availableStations);
                         }
-                        console.log(availableStation)
                         let html = `
                             <div class="card">
                                 <span>Predicted Number of Avaibility Bikes for Destination Station ${destination} : <b>${availableStation}</b></span>
@@ -336,7 +298,6 @@ async function getRoute(e){
 
 function showBikeAvaibilityChart(){
 temp = findRouteResponse.time;
-console.log(temp);
 var xValues = ["last 40 min", "last 35 min", "last 30 min", "last 25 min", "last 20 min", "last 15 min", "last 10 min", "last 05 min"];
 var yValues = temp;
 var barColors = [];
@@ -417,7 +378,6 @@ function calcRoute(start, end, type) {
 
                 // Update route bounds
                 routeBounds = updatedResponse.routes[0].bounds;
-                // console.log(routeBounds);
                 // Fit updated bounds
                 map.fitBounds(routeBounds);
 
@@ -527,14 +487,12 @@ function initAutocomplete() {
     // components here if needed.
     autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
-        console.log(place)
         if (!place.geometry) {
             stationData.forEach(function(station) {
                 addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
             });
             return;
         }
-        console.log(place);
         // Now that we have a place, let's find the nearest stations
         const userLocation = place.geometry.location;
         const nearestStations = findNearestStations(userLocation);
@@ -606,7 +564,6 @@ function findNearestStations(userLocation) {
 
 
     // Here you can do something with the nearest stations, like displaying them on the map
-    console.log(nearestStations);
 
     return nearestStations;
 }
@@ -624,7 +581,6 @@ $(document).ready(function() {
         placeholder: "Select a station",
         allowClear: true
     });
-    console.log('unde')
     // Populate the select element with options from stationData
     if (typeof stationData === 'undefined') {
         fetch('/getData')
@@ -640,7 +596,6 @@ $(document).ready(function() {
           console.error('Error fetching data:', error);
       });
     }else{
-        console.log('unde')
         stationData.forEach(function(station) {
             var option = new Option(station.address, station.number, false, false);
             $select.append(option).trigger('change');
