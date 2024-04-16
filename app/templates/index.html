@@ -45,10 +45,13 @@
                   <form >
                      <label for="source">Source</label>
                       <br>
-                     <select name="source" class="input select2" id="source" required style="width: 100%;"></select><br>
+                     <select name="source" class="input select2" id="source" required style="width: 100%;">
+                        <option value="" disabled selected>Select a Station</option>
+                     </select><br>
                      <label for="destination">Destination</label>
                       <br>
                       <select name="destination" class="input select2" id="destination" required style="width: 100%;">
+                        <option value="" disabled selected>Select a Station</option>
                     </select><br><br>
                      <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
                   </form>
