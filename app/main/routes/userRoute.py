@@ -51,7 +51,7 @@ def getRoutee():
     day = request.args.get('day', default='', type=str)
     time = request.args.get('time', default='', type=str)
     routeHandler = RouteHandler()
-    response = routeHandler.predictStation(destinationid)
+    response = routeHandler.predictStation(destination)
     statement = """SELECT * FROM dbikes.availability where number_id="""+str(destinationid)+""" order by last_update desc limit 10;"""
     # statement = """"SELECT * FROM dbikes.availability where number_id="""+destinationid+"""
     #     and timestampdiff(MINUTE,availability.last_update, availability.last_update) < 5 && timestampdiff(MINUTE,availability.time_queried, weather_current.time_queried) > 0"""""

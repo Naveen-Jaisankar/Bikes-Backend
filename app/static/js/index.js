@@ -261,18 +261,27 @@ async function getRoute(e){
                     // prompt box
                     document.getElementById('loadingMessage').style.display = 'block';
 
-                    // const url = new URL('http://127.0.0.1:5000/getRoutee');
-                    const url = new URL('http://3.249.156.68/getRoutee');
+                    const url = new URL('http://127.0.0.1:5000/getRoutee');
+                    // const url = new URL('http://3.249.156.68/getRoutee');
                     let destinationId;
                     var latLngMap = new Map();
                     destination=document.getElementById("destination").value;
                     source = document.getElementById("source").value;
+                    // for(let i of data){
+                    //     if(i.name.toUpperCase()==destination.toUpperCase()){
+                    //         destinationId = i.number;
+                    //         latLngMap.set(destination, i.position);
+                    //     }
+                    //     if(i.name.toUpperCase()==source.toUpperCase()){
+                    //         latLngMap.set(source, i.position);
+                    //     }
+                    // }
                     for(let i of data){
-                        if(i.name.toUpperCase()==destination.toUpperCase()){
+                        if(i.number==destination){
                             destinationId = i.number;
                             latLngMap.set(destination, i.position);
                         }
-                        if(i.name.toUpperCase()==source.toUpperCase()){
+                        if(i.number==source){
                             latLngMap.set(source, i.position);
                         }
                     }
@@ -294,10 +303,10 @@ async function getRoute(e){
                   .then(response => response.json()) // parsing the JSON response
                   .then(
                     data => {
-                        // var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
-                        // var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
-                        var selectedOptionVal1 = document.getElementById("source").value;
-                        var selectedOptionVal2 = document.getElementById("destination").value;
+                        var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
+                        var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
+                        // var selectedOptionVal1 = document.getElementById("source").value;
+                        // var selectedOptionVal2 = document.getElementById("destination").value;
                         findRouteResponse = data;
                         calcRoute(
                          latLngMap.get(source), latLngMap.get(destination), "bike");
