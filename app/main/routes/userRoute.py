@@ -35,7 +35,7 @@ def getAPIData():
             'https://api.jcdecaux.com/vls/v1/stations?contract=' + CONTRACT_NAME + '&apiKey=' + API_KEY + '')
         return jsonify(data.json())
     except:
-        stations = open('../../static/stations.json').read()
+        stations = open('stations.json').read()
         return render_template("index.html", stations=stations)
 
 

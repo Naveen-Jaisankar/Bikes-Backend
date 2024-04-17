@@ -239,7 +239,7 @@ async function getRoute(e){
                     document.getElementById('loadingMessage').style.display = 'block';
 
                     // const url = new URL('http://127.0.0.1:5000/getRoutee');
-                    const url = new URL('http://34.254.204.252/getRoutee');
+                    const url = new URL('http://54.159.92.147/getRoutee');
                     let destinationId;
                     var latLngMap = new Map();
                     destination=document.getElementById("destination").value;
