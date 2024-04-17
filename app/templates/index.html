@@ -40,6 +40,17 @@
          </div>
          <div class="sidebar">
             <div class="container">
+               <div id="availability-container">
+                  <div class="heading">Find Station</div>
+                  <form>
+                     <label class="label" for="locationSearch">Enter Location</label>
+                     <input type="text" name="locationSearch" class="input" id="locationSearch" placeholder="Enter your location here"><br>
+                     <div class="center-container">
+                        <button class="button-submit" type="submit" onClick="checkAvailability(event);">Search</button>
+                     </div>
+                 </form>
+
+               </div>
                <div id="route-container">
                   <div class="heading">Get Route</div>
                   
@@ -58,20 +69,8 @@
                      <button class="button-submit" type="submit" onClick="getRoute(event);">Plan Your Journey</button>
                     </div>                     
                   </form>
-               </div>
-
-               <div id="availability-container">
-                  <div class="heading">Check Availability</div>
-                  <form>
-                     <label class="label" for="locationSearch">Enter Location</label>
-                     <input type="text" name="locationSearch" class="input" id="locationSearch" placeholder="Enter your location here"><br>
-                     <div class="center-container">
-                        <button class="button-submit" type="submit" onClick="checkAvailability(event);">Check Availability</button>
-                     </div>
-                 </form>
                   <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-               </div>
-               
+               </div>               
             </div>
            <div id="showInfo"></div>
            <div id="showResult">
