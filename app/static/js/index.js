@@ -154,15 +154,6 @@ function addMarkerWithLabel(position, obj) {
                     <p><b>Available Bikes</b>: ${obj.available_bikes}</p>
                 </div>
             `;
-    // var url = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld='+obj.available_bikes+'|FF776B|000000';
-    // let contentString = `
-    //             <div>
-    //                 <p><b>Name</b>: ${obj.name}</p>
-    //                 <p><b>Total Bike Stands</b>: ${obj.bike_stands}</p>
-    //                 <p><b>Total Available Bike Stands</b>: ${obj.available_bike_stands}</p>
-    //                 <p><b>Available Bikes</b>: ${obj.available_bikes}</p>
-    //             </div>
-    // `;
 
     var infowindow =  new google.maps.InfoWindow({
 	    content: contentString,
@@ -242,14 +233,13 @@ function searchDestination(){
     var address = document.getElementById("search-input").value;
 }
 
-
 async function getRoute(e){
                     e.preventDefault();
                     // prompt box
                     document.getElementById('loadingMessage').style.display = 'block';
 
-                    const url = new URL('http://127.0.0.1:5000/getRoutee');
-                    // const url = new URL('http://3.249.156.68/getRoutee');
+                    // const url = new URL('http://127.0.0.1:5000/getRoutee');
+                    const url = new URL('http://54.159.92.147/getRoutee');
                     let destinationId;
                     var latLngMap = new Map();
                     destination=document.getElementById("destination").value;
@@ -270,8 +260,6 @@ async function getRoute(e){
                         source:document.getElementById("source").value,
                         destination:document.getElementById("destination").value,
                         id:destinationId,
-                        // day:document.getElementById("day").value,
-                        // time:document.getElementById("time").value
                     }
                     // let route = new FormData(document.querySelector('form'));
                     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
@@ -281,10 +269,10 @@ async function getRoute(e){
                   .then(response => response.json()) // parsing the JSON response
                   .then(
                     data => {
-                        // var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
-                        // var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
-                        var selectedOptionVal1 = document.getElementById("source").value;
-                        var selectedOptionVal2 = document.getElementById("destination").value;
+                        var selectedOptionVal1 = $('#station_dd_1').find(":selected").val();
+                        var selectedOptionVal2 = $('#station_dd_2').find(":selected").val();
+                        // var selectedOptionVal1 = document.getElementById("source").value;
+                        // var selectedOptionVal2 = document.getElementById("destination").value;
                         findRouteResponse = data;
                         calcRoute(
                          latLngMap.get(source), latLngMap.get(destination), "bike");
