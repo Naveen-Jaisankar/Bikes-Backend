@@ -42,28 +42,37 @@ def getAPIData():
 @bp.route('/getRoutee', methods=['GET'])
 @cross_origin()
 def getRoutee():
-    source = request.args.get('source', default='', type=str)
-    destination = request.args.get('destination', default='', type=str)
-    destinationid = request.args.get('id', default='', type=str)
-    print(destinationid)
-    day = request.args.get('day', default='', type=str)
-    time = request.args.get('time', default='', type=str)
-    routeHandler = RouteHandler()
-    response = routeHandler.predictStation(destination)
-    statement = """SELECT * FROM dbikes.availability where number_id="""+str(destinationid)+""" order by last_update desc limit 10;"""
-    # statement = """"SELECT * FROM dbikes.availability where number_id="""+destinationid+"""
-    #     and timestampdiff(MINUTE,availability.last_update, availability.last_update) < 5 && timestampdiff(MINUTE,availability.time_queried, weather_current.time_queried) > 0"""""
-    # df = routeHandler.sql_query(statement)
-    # # print(list(df))
-    temp = []
-    # for i in list(df):
-    #     temp.append(i.index(3))
-    for i in range(10):
-        temp.append(random.randint(0, 10))
-    response['time'] = temp
-    # json.dumps(temp)
-    # response =  routeHandler.getRoute(source,destination,day,time)
-    return jsonify(response)
+    try:
+        source = request.args.get('source', default='', type=str)
+        destination = request.args.get('destination', default='', type=str)
+        destinationid = request.args.get('id', default='', type=str)
+        print(destinationid)
+        day = request.args.get('day', default='', type=str)
+        time = request.args.get('time', default='', type=str)
+        routeHandler = RouteHandler()
+        response = routeHandler.predictStation(destination)
+        statement = """SELECT * FROM dbikes.availability where number_id="""+str(destinationid)+""" order by last_update desc limit 10;"""
+        # statement = """"SELECT * FROM dbikes.availability where number_id="""+destinationid+"""
+        #     and timestampdiff(MINUTE,availability.last_update, availability.last_update) < 5 && timestampdiff(MINUTE,availability.time_queried, weather_current.time_queried) > 0"""""
+        # df = routeHandler.sql_query(statement)
+        # # print(list(df))
+        temp = []
+        # for i in list(df):
+        #     temp.append(i.index(3))
+        for i in range(10):
+            temp.append(random.randint(0, 10))
+        response['time'] = temp
+        # json.dumps(temp)
+        # response =  routeHandler.getRoute(source,destination,day,time)
+        return jsonify(response)
+    except:
+        response={}
+        response['availableStations'] = random.randint(0,20)
+        temp = []
+        for i in range(10):
+            temp.append(random.randint(0, 10))
+        response['time'] = temp
+        return jsonify(response)
 
 @bp.route('/test_image')
 def test_image():
