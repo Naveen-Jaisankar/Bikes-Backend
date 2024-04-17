@@ -42,27 +42,32 @@
             <div class="container">
                <div id="route-container">
                   <div class="heading">Get Route</div>
+                  
                   <form >
-                     <label for="source">Source</label>
+                     <label class="label" for="source">Source</label>
                       <br>
                      <select name="source" class="input select2" id="source" required style="width: 100%;">
                         <option value="" disabled selected>Select a Station</option>
                      </select><br><br>
-                     <label for="destination">Destination</label>
+                     <label class="label" for="destination">Destination</label>
                       <br>
                       <select name="destination" class="input select2" id="destination" required style="width: 100%;">
                         <option value="" disabled selected>Select a Station</option>
                     </select><br><br>
-                     <button type="submit" onClick="getRoute(event);">Plan Your Journey</button>
+                    <div class="left-container">
+                     <button class="button-submit" type="submit" onClick="getRoute(event);">Plan Your Journey</button>
+                    </div>                     
                   </form>
                </div>
 
                <div id="availability-container">
                   <div class="heading">Check Availability</div>
                   <form>
-                     <label for="locationSearch">Enter Location</label>
+                     <label class="label" for="locationSearch">Enter Location</label>
                      <input type="text" name="locationSearch" class="input" id="locationSearch" placeholder="Enter your location here"><br>
-                     <button type="submit" onClick="checkAvailability(event);">Check Availability</button>
+                     <div class="center-container">
+                        <button class="button-submit" type="submit" onClick="checkAvailability(event);">Check Availability</button>
+                     </div>
                  </form>
                   <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
                </div>
