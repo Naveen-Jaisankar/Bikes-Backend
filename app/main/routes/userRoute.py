@@ -53,7 +53,8 @@ def getRoutee():
         time = request.args.get('selectedTime', default='', type=str)
         print(request.args)
         routeHandler = RouteHandler()
-        response = routeHandler.predictStation(destination,day,time)
+        # response = routeHandler.predictStation(destination,day,time)
+        response = routeHandler.dummy()
         statement = """SELECT * FROM dbikes.availability where number_id="""+str(destinationid)+""" order by last_update desc limit 10;"""
         temp = []
         for i in range(10):
@@ -72,3 +73,4 @@ def getRoutee():
 @bp.route('/test_image')
 def test_image():
     return url_for('static', filename='app/static/assets/marker.png')
+
