@@ -17,7 +17,7 @@ set FLASK_ENV=app
 
 To run the application use command
 ```bash
-flash run
+flask run
 ```
 
 ## Usage
