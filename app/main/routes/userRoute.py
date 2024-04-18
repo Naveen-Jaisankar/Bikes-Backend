@@ -49,10 +49,11 @@ def getRoutee():
         destination = request.args.get('destination', default='', type=str)
         destinationid = request.args.get('id', default='', type=str)
         print(destinationid)
-        day = request.args.get('day', default='', type=str)
-        time = request.args.get('time', default='', type=str)
+        day = request.args.get('selectedDay', default='', type=str)
+        time = request.args.get('selectedTime', default='', type=str)
+        print(request.args)
         routeHandler = RouteHandler()
-        response = routeHandler.predictStation(destination)
+        response = routeHandler.predictStation(destination,day,time)
         statement = """SELECT * FROM dbikes.availability where number_id="""+str(destinationid)+""" order by last_update desc limit 10;"""
         temp = []
         for i in range(10):

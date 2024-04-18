@@ -62,9 +62,54 @@
                      </select><br><br>
                      <label class="label" for="destination">Destination</label>
                       <br>
-                      <select name="destination" class="input select2" id="destination" required style="width: 100%;">
+                     <select name="destination" class="input select2" id="destination" required style="width: 100%;">
                         <option value="" disabled selected>Select a Station</option>
-                    </select><br><br>
+                    </select>
+                    <input type="hidden" id="selectedDay" name="selectedDay" value="">
+                    <input type="hidden" id="selectedTime" name="selectedTime" value="">
+                    <nav class="dropdown-container">
+                     <div class="dropdown hover">
+                       <a href="#" id="dayDropDown">Day</a>
+                       <ul>
+                         <li><a href="#" onclick="selectDay('Monday')">Monday</a></li>
+                         <li><a href="#" onclick="selectDay('Tuesday')">Tuesday</a></li>
+                         <li><a href="#" onclick="selectDay('Wednesday')">Wednesday</a></li>
+                         <li><a href="#" onclick="selectDay('Thursday')">Thursday</a></li>
+                         <li><a href="#" onclick="selectDay('Friday')">Friday</a></li>
+                         <li><a href="#" onclick="selectDay('Saturday')">Saturday</a></li>
+                         <li><a href="#" onclick="selectDay('Sunday')">Sunday</a></li>
+                       </ul>
+                     </div>
+                     <div class="dropdown hover">
+                        <a href="#" id="timeDropDown">Time</a>
+                        <ul>
+                          <li><a href="#" onclick="selectTime('00:00')">00:00</a></li>
+                          <li><a href="#" onclick="selectTime('01:00')">01:00</a></li>
+                          <li><a href="#" onclick="selectTime('02:00')">02:00</a></li>
+                          <li><a href="#" onclick="selectTime('03:00')">03:00</a></li>
+                          <li><a href="#" onclick="selectTime('04:00')">04:00</a></li>
+                          <li><a href="#" onclick="selectTime('05:00')">05:00</a></li>
+                          <li><a href="#" onclick="selectTime('06:00')">06:00</a></li>
+                          <li><a href="#" onclick="selectTime('07:00')">07:00</a></li>
+                          <li><a href="#" onclick="selectTime('08:00')">08:00</a></li>
+                          <li><a href="#" onclick="selectTime('09:00')">09:00</a></li>
+                          <li><a href="#" onclick="selectTime('10:00')">10:00</a></li>
+                          <li><a href="#" onclick="selectTime('11:00')">11:00</a></li>
+                          <li><a href="#" onclick="selectTime('12:00')">12:00</a></li>
+                          <li><a href="#" onclick="selectTime('13:00')">13:00</a></li>
+                          <li><a href="#" onclick="selectTime('14:00')">14:00</a></li>
+                          <li><a href="#" onclick="selectTime('15:00')">15:00</a></li>
+                          <li><a href="#" onclick="selectTime('16:00')">16:00</a></li>
+                          <li><a href="#" onclick="selectTime('17:00')">17:00</a></li>
+                          <li><a href="#" onclick="selectTime('18:00')">18:00</a></li>
+                          <li><a href="#" onclick="selectTime('19:00')">19:00</a></li>
+                          <li><a href="#" onclick="selectTime('20:00')">20:00</a></li>
+                          <li><a href="#" onclick="selectTime('21:00')">21:00</a></li>
+                          <li><a href="#" onclick="selectTime('22:00')">22:00</a></li>
+                          <li><a href="#" onclick="selectTime('23:00')">23:00</a></li>
+                        </ul>
+                      </div>
+                   </nav>
                     <div class="left-container">
                      <button class="button-submit" type="submit" onClick="getRoute(event);">Plan Your Journey</button>
                     </div>                     

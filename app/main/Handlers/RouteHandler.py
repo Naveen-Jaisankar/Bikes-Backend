@@ -42,7 +42,7 @@ class RouteHandler:
         print(matching_stations)
         return matching_stations
 
-    def predictStation(self,stationId):
+    def predictStation(self,stationId,day,time):
         try:
             city_name = 'Dublin'
             country_code = 'IE'
@@ -80,6 +80,9 @@ class RouteHandler:
             date = convertTimestampToSQLDateTime(flat_weather['dt'])
             flat_weather['hour'] = datetime.datetime.now().hour
             flat_weather['Day'] = datetime.datetime.now().day % 7
+
+            print(datetime.datetime.now().hour,datetime.datetime.now().day % 7)
+
 
             del flat_weather['coord_lon']
             del flat_weather['coord_lat']

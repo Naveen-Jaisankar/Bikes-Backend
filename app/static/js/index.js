@@ -244,6 +244,8 @@ async function getRoute(e){
                     var latLngMap = new Map();
                     destination=document.getElementById("destination").value;
                     source = document.getElementById("source").value;
+                    day=document.getElementById("selectedDay").value;
+                    time = document.getElementById("selectedTime").value;
                     
                     for(let i of data){
                         if(i.number==destination){
@@ -260,6 +262,8 @@ async function getRoute(e){
                         source:document.getElementById("source").value,
                         destination:document.getElementById("destination").value,
                         id:destinationId,
+                        day:document.getElementById("selectedDay").value,
+                        time:document.getElementById("selectedTime").value
                     }
                     // let route = new FormData(document.querySelector('form'));
                     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
@@ -642,3 +646,14 @@ $(document).ready(function() {
     // Update Select2
     $select.trigger('change');
 });
+
+function selectDay(day) {
+     document.getElementById('dayDropDown').textContent = day;
+     document.getElementById('selectedDay').value = day;
+  }
+
+  function selectTime(time) {
+    document.getElementById('timeDropDown').textContent = time;
+    document.getElementById('selectedTime').value = time;
+    // Close the dropdown if needed
+  }
