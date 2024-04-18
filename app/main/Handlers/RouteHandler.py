@@ -81,6 +81,7 @@ class RouteHandler:
             flat_weather['hour'] = datetime.datetime.now().hour
             flat_weather['Day'] = datetime.datetime.now().day % 7
 
+            print(day,time)
             print(datetime.datetime.now().hour,datetime.datetime.now().day % 7)
 
 
