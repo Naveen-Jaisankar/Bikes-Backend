@@ -297,30 +297,69 @@ async function getRoute(e){
                   .catch(error => console.error('Error:', error)); // handling any error
 }
 
-function showBikeAvaibilityChart(){
-temp = findRouteResponse.time;
-var xValues = ["last 40 min", "last 35 min", "last 30 min", "last 25 min", "last 20 min", "last 15 min", "last 10 min", "last 05 min"];
-var yValues = temp;
-var barColors = [];
+// function showBikeAvaibilityChart(){
+// temp = findRouteResponse.time;
+// var xValues = ["last 40 min", "last 35 min", "last 30 min", "last 25 min", "last 20 min", "last 15 min", "last 10 min", "last 05 min"];
+// var yValues = temp;
+// var barColors = [];
 
-new Chart("myChart", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor: barColors,
-      data: yValues
-    }]
-  },
-  options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      text: "Bike Avaibility Data"
-    }
-  }
-});
+// new Chart("myChart", {
+//   type: "bar",
+//   data: {
+//     labels: xValues,
+//     datasets: [{
+//       backgroundColor: barColors,
+//       data: yValues
+//     }]
+//   },
+//   options: {
+//     legend: {display: false},
+//     title: {
+//       display: true,
+//       text: "Bike Avaibility Data"
+//     }
+//   }
+// });
+// }
+
+function showBikeAvaibilityChart(){
+    var temp = findRouteResponse.time; // Make sure this is an array of values
+    var xValues = ["last 40 min", "last 35 min", "last 30 min", "last 25 min", "last 20 min", "last 15 min", "last 10 min", "last 5 min"];
+    var yValues = temp;
+    var barColors = yValues.map(value => {
+        // Dynamically generate colors based on the value
+        if (value < 5) return '#D3D3D3';
+        else return '#A9A9A9'; 
+    });
+
+    new Chart("myChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            legend: {display: false},
+            title: {
+                display: true,
+                text: "Bike Availability Data"
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 10 // Adjust this value as per your data range and preference
+                    }
+                }]
+            }
+        }
+    });
 }
+
+
 
 function calcRoute(start, end, type) {
     start = new google.maps.LatLng(start.lat, start.lng);
