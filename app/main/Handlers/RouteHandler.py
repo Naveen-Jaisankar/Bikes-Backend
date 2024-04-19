@@ -78,11 +78,12 @@ class RouteHandler:
                 return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(value))
 
             date = convertTimestampToSQLDateTime(flat_weather['dt'])
-            flat_weather['hour'] = datetime.datetime.now().hour
-            flat_weather['Day'] = datetime.datetime.now().day % 7
+            # flat_weather['hour'] = datetime.datetime.now().hour
+            # flat_weather['Day'] = datetime.datetime.now().day % 7
 
-            print(day,time)
-            print(datetime.datetime.now().hour,datetime.datetime.now().day % 7)
+
+            flat_weather['hour'] = time
+            flat_weather['Day'] = day
 
 
             del flat_weather['coord_lon']
