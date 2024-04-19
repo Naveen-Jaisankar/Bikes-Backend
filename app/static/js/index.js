@@ -511,10 +511,33 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Fetching weather data failed', error));
 });
 
+document.getElementById('locationSearch').addEventListener('keydown', function(event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+        event.preventDefault();  // Prevent the default action (form submission)
+        return false;            // Stop the event from propagating
+    }
+});
+
+document.getElementById('locationSearch').addEventListener('input', function(event) {
+    const inputValue = event.target.value;
+    if (inputValue.trim() === "") {  // Check if the input field is empty
+         repopulateAllMarkers();      // Call the function to repopulate all markers     
+    }
+});
+
+function repopulateAllMarkers(){
+    clearMarkers();
+    stationData.forEach(function(station) {
+        addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
+    });
+}
+
+
 
 function initAutocomplete() {
     // Create the autocomplete object, restricting the search predictions to
     // geographical location types.
+
     const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('locationSearch'),
         { types: ['geocode'] }
@@ -532,9 +555,6 @@ function initAutocomplete() {
     autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         if (!place.geometry) {
-            stationData.forEach(function(station) {
-                addMarkerWithLabel({lat: station.position.lat, lng: station.position.lng}, station);
-            });
             return;
         }
         // Now that we have a place, let's find the nearest stations
@@ -590,7 +610,7 @@ function adjustCameraToMarkers() {
 }
 
 function findNearestStations(userLocation) {
-    const radius = 1000; // 5 km in meters
+    const radius = 1000; // 1 km in meters
     const nearestStations = stationData.filter(station => {
         const stationLocation = new google.maps.LatLng(station.position.lat, station.position.lng);
         const distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, stationLocation);
