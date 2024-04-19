@@ -199,3 +199,9 @@ class RouteHandler:
         engine.dispose()
         # return json.dumps([dict(row._mapping) for row in rows])
         return rows
+
+    def dummy(self):
+        response = {}
+        response['availableStations'] = random.randint(0, 20)
+        return response
+
